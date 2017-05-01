@@ -25,6 +25,7 @@ If you install a certificate on each server, then be sure to get a certificate t
 3) OSI / TCP/IP
 https://en.wikipedia.org/wiki/OSI_model
 https://en.wikipedia.org/wiki/Internet_protocol_suite
+
 4) YAML VS JSON
 	1.	YAML, depending on how you use it, can be more readable than JSON
 	2.	JSON is often faster and is probably still interoperable with more systems
@@ -54,3 +55,10 @@ INNODB:
 	4.	InnoDB stores its tables and indexes in a tablespace
 	5.	InnoDB supports transaction. You can commit and rollback with InnoDB
 
+6) Apache vs Nginx
+1. Apache new query - new flow (process). 
+2. Nginx  new query - new event (new worker connection)
+3. Nginx uses low memory for static page, Apache creates the process for it
+4. Nginx is extremely fast for serving static pages
+5. Nginx more flexible in configuration, you can use scripts constructions, and for example Lua.
+6. Nginx preferable for load balancing

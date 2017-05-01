@@ -3,24 +3,21 @@
 TCP is a Transmission Control Protocol. 
 UDP is a User Datagram Protocol.
 There are four major differences between UDP and TCP:
-1. TCP can establishes a Connection and UDP cannot.
-2. TCP provides a stream of unlimited length, UDP sends 
-small packets.
-3.TCP gurantees that as long as you have a connection data 
-sent will arrive at the destination, UDP provides not 
-guarantee delivery.
-4.UDP is faster for sending small amounts of data since no 
-connection setup is required, the data can be sent in less 
-time then it takes for TCP to establish a connection.
+	1. TCP can establishes a Connection and UDP cannot.
+	2. TCP provides a stream of unlimited length, UDP sends small packets.
+	3.TCP gurantees that as long as you have a connection data sent will arrive at the destination, UDP provides not 
+	guarantee delivery.
+	4.UDP is faster for sending small amounts of data since no 
+	connection setup is required, the data can be sent in less time then it takes for TCP to establish a connection.
 
 2) Does each server behind a load balancer need their own SSL certificate?
 
-It depends.
-If you do your load balancing on the TCP or IP layer (OSI layer 4/3, a.k.a L4, L3), then yes, all HTTP servers will need to have the SSL certificate installed.
-If you load balance on the HTTPS layer (L7), then you'd commonly install the certificate on the load balancer alone, and use plain un-encrypted HTTP over the local network between the load balancer and the webservers (for best performance on the web servers).
-If you have a large installation, then you may be doing Internet -> L3 load balancing -> layer of L7 SSL concentrators -> load balancers -> layer of L7 HTTP application servers...
-Willy Tarreau, the author of HAProxy, has a really nice overview of the canonical ways of load balancing HTTP/HTTPS.
-If you install a certificate on each server, then be sure to get a certificate that supports this. Normally certificates can be installed on multiple servers, as long as the servers all serve traffic for one Fully Qualified Domain Name only. But verify what you're buying, certificate issuers can have a confusing product portfolio...
+	It depends.
+	If you do your load balancing on the TCP or IP layer (OSI layer 4/3, a.k.a L4, L3), then yes, all HTTP servers will 	need to have the SSL certificate installed.
+	If you load balance on the HTTPS layer (L7), then you'd commonly install the certificate on the load balancer alone, 	and use plain un-encrypted HTTP over the local network between the load balancer and the webservers (for best performance 	on the web servers).
+	If you have a large installation, then you may be doing Internet -> L3 load balancing -> layer of L7 SSL 	concentrators -> load balancers -> layer of L7 HTTP application servers...
+	Willy Tarreau, the author of HAProxy, has a really nice overview of the canonical ways of load balancing HTTP/HTTPS.
+	If you install a certificate on each server, then be sure to get a certificate that supports this. Normally 		certificates can be installed on multiple servers, as long as the servers all serve traffic for one Fully Qualified 	    Domain Name only. But verify what you're buying, certificate issuers can have a confusing product portfolio...
 
 3) OSI / TCP/IP
 https://en.wikipedia.org/wiki/OSI_model
@@ -56,9 +53,9 @@ INNODB:
 	5.	InnoDB supports transaction. You can commit and rollback with InnoDB
 
 6) Apache vs Nginx
-1. Apache new query - new flow (process). 
-2. Nginx  new query - new event (new worker connection)
-3. Nginx uses low memory for static page, Apache creates the process for it
-4. Nginx is extremely fast for serving static pages
-5. Nginx more flexible in configuration, you can use scripts constructions, and for example Lua.
-6. Nginx preferable for load balancing
+	1. Apache new query - new flow (process). 
+	2. Nginx  new query - new event (new worker connection)
+	3. Nginx uses low memory for static page, Apache creates the process for it
+	4. Nginx is extremely fast for serving static pages
+	5. Nginx more flexible in configuration, you can use scripts constructions, and for example Lua.
+	6. Nginx preferable for load balancing

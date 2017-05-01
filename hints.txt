@@ -1,0 +1,66 @@
+#Anti DDOS filter. Ban IP which is has more than 20 queries to URL.
+tail -500 access.log | grep research-pape | awk '{print $1}' | sort | uniq -c | awk '{if ($1>20) print $2}' | xargs -I {} iptables -I INPUT -s {} -m comment --comment “ddoser” -j DROP
+============================================================================================================
+
+#Domain STATUS
+
+#!/bin/bash
+hostname=$(cat /etc/hostname)
+for i in $(ls /var/www/html); do echo "$i = $(curl -s -o /dev/null -w "%{http_code}" $i)" >> /root/sat_domains.txt; done
+scp /root/sat_domains.txt root@ip:/root/sat_domains_$HOSTNAME;
+============================================================================================================
+
+#AWS. Mapped EC2 IPS
+
+#!/bin/bash
+for i in `curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/`; do
+ for x in `curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/${i}/ipv4-associations/`; do
+ echo "public ip: $x"  "is private `curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/${i}/ipv4-associations/${x}`";
+ done
+done
+============================================================================================================
+#Centos.Manually Puppet Agent 3.8.7 installation:
+#/bin/bash
+
+yum remove puppet -y
+wget -q https://pm.puppetlabs.com/puppet-enterprise/3.8.7/puppet-enterprise-3.8.7-el-6-x86_64.tar.gz -O /tmp/puppet-enterprise-3.8.7-el-6-x86_64.tar.gz
+tar xvfp /tmp/puppet-enterprise-3.8.7-el-6-x86_64.tar.gz -C /tmp/
+
+echo "
+ q_install=y
+ q_puppet_cloud_install=n
+ q_puppet_enterpriseconsole_install=n
+ q_puppet_symlinks_install=y
+ q_puppetagent_certname=$HOSTNAME
+ q_puppetagent_install=y
+ q_puppetagent_server=puppet-satellites.uncomp.com
+ q_puppetmaster_install=n
+ q_puppetdb_install=n
+ q_vendor_packages_install=y
+ " > /tmp/puppet-enterprise-3.8.7-el-6-x86_64/my_answers.txt
+/tmp/puppet-enterprise-3.8.7-el-6-x86_64/puppet-enterprise-installer -a /tmp/puppet-enterprise-3.8.7-el-6-x86_64/my_answers.txt
+ln -s /opt/puppet/bin/puppet /usr/bin/puppet
+rm -rf /etc/puppetlabs/puppet/ssl
+puppet agent -t
+============================================================================================================
+Import single database from --all-databases dump:
+
+sed -n '/^-- Current Database: `dbname`/,/^-- Current Database: `/p' alldatabases.sql > output.sql
+============================================================================================================
+Kill Queries Like Select
+mysql -e "show processlist" | grep SELECT | awk '{print $1}' | xargs -I{} mysql -e "kill {}"
+
+
+============================================================================================================
+
+XHProf:
+Added to php.ini
+auto_prepend_file = "/var/www/xhgui/external/header.php"
+
+or Puppet verse:
+
+<% if (@fqdn == "essay.staging") %>auto_prepend_file = "/var/www/xhgui/external/header.php" 
+<%else %>
+auto_prepend_file = 
+<% end -%>
+============================================================================================================

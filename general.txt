@@ -1,0 +1,56 @@
+1) TCP / UDP
+
+TCP is a Transmission Control Protocol. 
+UDP is a User Datagram Protocol.
+There are four major differences between UDP and TCP:
+1. TCP can establishes a Connection and UDP cannot.
+2. TCP provides a stream of unlimited length, UDP sends 
+small packets.
+3.TCP gurantees that as long as you have a connection data 
+sent will arrive at the destination, UDP provides not 
+guarantee delivery.
+4.UDP is faster for sending small amounts of data since no 
+connection setup is required, the data can be sent in less 
+time then it takes for TCP to establish a connection.
+
+2) Does each server behind a load balancer need their own SSL certificate?
+
+It depends.
+If you do your load balancing on the TCP or IP layer (OSI layer 4/3, a.k.a L4, L3), then yes, all HTTP servers will need to have the SSL certificate installed.
+If you load balance on the HTTPS layer (L7), then you'd commonly install the certificate on the load balancer alone, and use plain un-encrypted HTTP over the local network between the load balancer and the webservers (for best performance on the web servers).
+If you have a large installation, then you may be doing Internet -> L3 load balancing -> layer of L7 SSL concentrators -> load balancers -> layer of L7 HTTP application servers...
+Willy Tarreau, the author of HAProxy, has a really nice overview of the canonical ways of load balancing HTTP/HTTPS.
+If you install a certificate on each server, then be sure to get a certificate that supports this. Normally certificates can be installed on multiple servers, as long as the servers all serve traffic for one Fully Qualified Domain Name only. But verify what you're buying, certificate issuers can have a confusing product portfolio...
+
+3) OSI / TCP/IP
+https://en.wikipedia.org/wiki/OSI_model
+https://en.wikipedia.org/wiki/Internet_protocol_suite
+4) YAML VS JSON
+	1.	YAML, depending on how you use it, can be more readable than JSON
+	2.	JSON is often faster and is probably still interoperable with more systems
+	3.	It's possible to write a "good enough" JSON parser very quickly
+	4.	Duplicate keys, which are potentially valid JSON, are definitely invalid YAML.
+	5.	YAML has a ton of features, including comments and relational anchors. YAML syntax is accordingly quite complex, and can be hard to understand.
+	6.	It is possible to write recursive structures in yaml: {a: &b [*b]}, which will loop infinitely in some converters. Even with circular detection, a "yaml bomb" is still possible (see xml bomb).
+	7.	Because there are no references, it is impossible to serialize complex structures with object references in JSON. YAML serialization can therefore be more efficient.
+Observations:
+	1.	Python programmers are generally big fans of YAML, because of the use of indentation, rather than bracketed syntax, to indicate levels.
+	2.	Many programmers consider the attachment of "meaning" to indentation a poor choice.
+	3.	If the data format will be leaving an application's environment, parsed within a UI, or sent in a messaging layer, JSON might be a better choice.
+	4.	YAML can be used, directly, for complex tasks like grammar definitions, and is often a better choice than inventing a new language.
+
+5) INNODB vs MYISAM
+	1.	MYISAM supports Table-level Locking
+	2.	MyISAM designed for need of speed
+	3.	MyISAM does not support foreign keys hence we call MySQL with MYISAM is DBMS
+	4.	MyISAM stores its tables, data and indexes in diskspace using separate three different files. (tablename.FRM, tablename.MYD, tablename.MYI)
+	5.	MYISAM not supports transaction. You cannot commit and rollback with MYISAM. Once you issue a command it’s done.
+	6.	MYISAM supports fulltext search
+	7.	You can use MyISAM, if the table is more static with lots of select and less update and delete.
+INNODB:
+	1.	InnoDB supports Row-level Locking
+	2.	InnoDB designed for maximum performance when processing high volume of data
+	3.	InnoDB support foreign keys hence we call MySQL with InnoDB is RDBMS
+	4.	InnoDB stores its tables and indexes in a tablespace
+	5.	InnoDB supports transaction. You can commit and rollback with InnoDB
+
